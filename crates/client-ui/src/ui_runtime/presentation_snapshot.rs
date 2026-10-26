@@ -18,9 +18,12 @@ struct CapturedUi {
 
 impl CapturedUi {
     fn swap(&mut self, runtime: &mut UiRuntime) {
-        std::mem::swap(&mut self.forms, &mut runtime.forms);
-        std::mem::swap(&mut self.open, &mut runtime.inventory_open);
-        std::mem::swap(&mut self.pointer, &mut runtime.inventory_pointer_gui);
+        std::mem::swap(&mut self.forms, &mut runtime.session.forms);
+        std::mem::swap(&mut self.open, &mut runtime.session.inventory_open);
+        std::mem::swap(
+            &mut self.pointer,
+            &mut runtime.session.inventory_pointer_gui,
+        );
         std::mem::swap(
             &mut self.controller_focus,
             &mut runtime.inventory_controller_focus,
@@ -54,9 +57,9 @@ impl UiRuntime {
         PresentationInventory {
             ledger: player_runtime.capture_ledger(),
             ui: CapturedUi {
-                forms: self.forms.clone(),
-                open: self.inventory_open,
-                pointer: self.inventory_pointer_gui,
+                forms: self.session.forms.clone(),
+                open: self.session.inventory_open,
+                pointer: self.session.inventory_pointer_gui,
                 controller_focus: self.inventory_controller_focus.clone(),
                 generation: self.container_generation,
                 controller_cursor: self.inventory_controller_cursor_visible,

@@ -473,7 +473,6 @@ pub fn run(args: args::ClientArgs) -> Result<()> {
         client_shell::player_skin::LocalPlayerSkin::load(&layout, &args.display_name)
     });
     let screenshots_dir = layout.screenshots_dir();
-    #[cfg(feature = "shaderpacks")]
     let shader_compiler = {
         let bundled = assets::carriers::kit_compiler(&layout.prep_kit());
         if layout.is_installed() {
@@ -595,7 +594,6 @@ pub fn run(args: args::ClientArgs) -> Result<()> {
     ui_presentation.set_safe_area(crate::ui_runtime::presentation::platform_safe_area_insets());
     #[cfg(target_os = "macos")]
     app.add_plugins(crate::macos_gamepad::SwitchGamepadPlugin);
-    #[cfg(feature = "shaderpacks")]
     app.insert_resource(render_scene::shaderpack::ShaderPackCompilerExecutable(
         shader_compiler,
     ));
@@ -655,7 +653,7 @@ pub fn run(args: args::ClientArgs) -> Result<()> {
     .insert_resource(UiRuntimeResource({
         let mut ui_runtime = UiRuntime::new(0);
         if let Some(address) = &args.address {
-            ui_runtime.experiences.select_destination(address);
+            ui_runtime.session.experiences.select_destination(address);
         }
         ui_runtime.set_lang_catalog(lang_assets.into_runtime());
         ui_runtime.set_active_language(active_lang);

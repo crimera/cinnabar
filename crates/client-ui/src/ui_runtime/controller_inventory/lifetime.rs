@@ -14,18 +14,18 @@ impl UiRuntime {
             .container_generation
             .checked_add(1)
             .expect("container generation exhausted");
-        self.inventory_pointer_gui = None;
+        self.session.inventory_pointer_gui = None;
         self.inventory_controller_focus = None;
         self.inventory_controller_cursor_visible = false;
     }
 
     /// Records every open/close edge at its mutation site, not at frame publication.
     pub(crate) fn set_inventory_open(&mut self, open: bool) {
-        if self.inventory_open == open {
+        if self.session.inventory_open == open {
             return;
         }
         self.advance_container_generation();
-        self.inventory_open = open;
+        self.session.inventory_open = open;
     }
 
     /// The controller highlight key; text-entry focus remains separately owned.

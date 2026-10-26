@@ -90,7 +90,7 @@ fn chest() -> (UiRuntime, player_state::PlayerState) {
         slots: vec![NetworkItemStack::empty(); 36].into(),
         storage_item: NetworkItemStack::empty(),
     }));
-    runtime.inventory_open = true;
+    runtime.set_inventory_open(true);
     (runtime, player)
 }
 
@@ -377,7 +377,7 @@ fn a_new_screen_generation_makes_a_personal_token_stale() {
     runtime
         .inventory_ledger_mut(&mut player)
         .apply(&InventoryEvent::Authority(InventoryAuthority::Server));
-    runtime.inventory_open = true;
+    runtime.set_inventory_open(true);
     let first = runtime.container_screen_token(&player, 1).unwrap();
     assert_eq!(
         first,
@@ -404,7 +404,7 @@ fn a_new_screen_generation_makes_a_personal_token_stale() {
 fn retained_server_window_with_the_ui_closed_is_closed() {
     let (mut runtime, mut player) = chest();
     let token = runtime.container_screen_token(&player, GEN).unwrap();
-    runtime.inventory_open = false;
+    runtime.set_inventory_open(false);
     assert!(player.inventory.ledger().window_kind().is_some());
     assert_eq!(runtime.container_screen_token(&player, GEN), None);
     assert!(
@@ -433,7 +433,7 @@ fn retained_server_window_with_the_ui_closed_is_closed() {
 #[test]
 fn closed_screen_offers_nothing() {
     let (mut runtime, player) = chest();
-    runtime.inventory_open = false;
+    runtime.set_inventory_open(false);
     let hit = InventoryCellHit::Player(0);
     assert!(runtime.container_controller_hints(&player, hit).is_empty());
     assert!(
